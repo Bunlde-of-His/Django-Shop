@@ -1,0 +1,68 @@
+{% extends "base.html" %}
+
+{% block title %} Shop #1 {% endblock %}
+
+{% block content %}
+    {% for message in messages %}
+    <div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert">
+        {{ message }}
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+    {% endfor %}
+    <section class="py-2">
+        <div class "container px-4 px-lg-5 mt-5">
+            <div class="row gx-4 gx-lg-5 row-cols-2 row-cols-md-3 row-cols-xl-4 justify-content-center">
+
+                {% for obj in page_obj %}
+                <div class="col mb-5">
+                    <div class="card h-100">
+                        <div class="badge bg-danger text-white position-absolute mt-1 ms-1">Sale</div>
+                        <img class="card-img-top mx-auto" src="{{ obj.image.url }}" alt="Product Image"
+                             style="width: 134px; height: 279px;">
+                        <div class="card-body">
+                            <a href="#" class="h4 text-primary text-decoration-none">{{ obj.title }}</a>
+                            <div class="product-price text-center">
+                                <span class="price fw-bold ms-2">{{ obj.price }}</span>
+                            </div>
+                        </div>
+                        {% if request.user.is_authenticated %}
+                        <div class="card-footer p-4 pt-0 border-top-0 bg-transparent">
+                            <div class="text-center">
+                                <a href="{% url 'shop:purchase_product' obj.pk %}" class="btn btn-outline-dark mt-auto"
+                                   role="button">
+                                    <span class="bi bi-cart4"></span> Buy
+                                </a>
+                                <div class="text-center">
+                                    <span class="price fw-bold ms-2">In stock: {{ obj.stock }}</span>
+                                </div>
+                            </div>
+                        </div>
+                        {% else %}
+                        <div class="card-footer p-4 pt-0 border-top-0 bg-transparent">
+                            <div class="text-center">
+                                <a class="btn btn-info" aria-current="page" href="{% url 'shop:login' %}">You have to login first</a>
+                            </div>
+                        </div>
+                        {% endif %}
+                    </div>
+                </div>
+                {% endfor %}
+                <div class="pagination">
+                    <span class="step-links">
+                        {% if page_obj.has_previous %}
+                            <a href="?page=1">&laquo; first</a>
+                            <a href="?page={{ page_obj.previous_page_number }}">previous</a>
+                        {% endif %}
+                        <span class="current">
+                            Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}.
+                        </span>
+                        {% if page_obj.has_next %}
+                            <a href="?page={{ page_obj.next_page_number }}">next</a>
+                            <a href="?page={{ page_obj.paginator.num_pages }}">last &raquo;</a>
+                        {% endif %}
+                    </span>
+                </div>
+            </div>
+        </div>
+    </section>
+{% endblock %}

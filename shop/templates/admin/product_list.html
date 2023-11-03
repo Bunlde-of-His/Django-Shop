@@ -1,0 +1,55 @@
+{% extends "base.html" %}
+
+{% load static %}
+
+{% block title %} Product List {% endblock %}
+
+{% block content %}
+<div class="d-flex justify-content-center">
+    <a class="btn btn-info" aria-current="page" href="{% url 'shop:add_product' %}">Add new product</a>
+</div>
+<section class="py-2">
+  <div class="container px-4 px-lg-5 mt-5">
+    <div class="row gx-4 gx-lg-5 row-cols-2 row-cols-md-3 row-cols-xl-4 justify-content-center">
+      {% for obj in page_obj %}
+      <div class="col mb-5">
+        <div class="card h-100">
+          <div class="badge bg-danger text-white position-absolute mt-1 ms-1">Sale</div>
+         <img class="card-img-top mx-auto" src="{% static obj.image.url %}" alt="Product Image" style="width: 134px; height: 279px;">
+          <div class="card-body">
+            <a href="#" class="h4 text-primary text-decoration-none">{{ obj.title }}</a>
+            <div class="product-price text-center">
+              <span class="price fw-bold ms-2">{{ obj.price }}</span>
+            </div>
+          </div>
+          <div class="card-footer p-4 pt-0 border-top-0 bg-transparent">
+            <div class="text-center">
+              <span class="price fw-bold ms-2">In stock: {{ obj.stock }}</span>
+            </div>
+            <a class="btn btn-info" aria-current="page" href="{% url 'shop:change_product' obj.pk %}">Change</a>
+            <a class="btn btn-danger" aria-current="page" href="{% url 'shop:product_confirm_delete' obj.pk %}">Delete</a>
+          </div>
+        </div>
+      </div>
+      {% endfor %}
+      <div class="pagination">
+      <span class="step-links">
+        {% if page_obj.has_previous %}
+            <a href="?page=1">&laquo; first</a>
+            <a href="?page={{ page_obj.previous_page_number }}">previous</a>
+        {% endif %}
+
+        <span class="current">
+            Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}.
+        </span>
+
+        {% if page_obj.has_next %}
+            <a href="?page={{ page_obj.next_page_number }}">next</a>
+            <a href="?page={{ page_obj.paginator.num_pages }}">last &raquo;</a>
+        {% endif %}
+    </span>
+    </div>
+    </div>
+  </div>
+</section>
+{% endblock %}
