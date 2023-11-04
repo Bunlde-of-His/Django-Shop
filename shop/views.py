@@ -11,12 +11,16 @@ from django.views.generic.base import TemplateView
 from django.contrib import messages
 from django.urls import reverse
 from django.http import HttpResponseRedirect
-
+from django.contrib import messages
+from django.urls import reverse
+from django.http import HttpResponseRedirect
 from shop.forms import CustomUserCreationForm, PurchaseForm, RefundForm
 from shop.models import Product, Refund, Purchase
+from datetime import timedelta
+from django.utils import timezone
 
 
-class Products(ListView):
+class ListOfProducts(ListView):
     paginate_by = 8
     model = Product
     template_name = 'index.html'
@@ -29,7 +33,7 @@ class AdminProductList(ListView):
     context_object_name = 'products'
 
 
-class Register(CreateView):
+class Registration(CreateView):
     form_class = CustomUserCreationForm
     template_name = 'common_user/register.html'
     success_url = '/'
@@ -48,7 +52,7 @@ class Logout(LoginRequiredMixin, LogoutView):
     login_url = 'login/'
 
 
-class ChangeProduct(UpdateView):
+class EditProduct(UpdateView):
     model = Product
     fields = ['image', 'title', 'description', 'price', 'stock']
     template_name = 'admin/change_product.html'
@@ -69,13 +73,13 @@ class ProductDelete(DeleteView):
     context_object_name = 'product'
 
 
-class Refunds(ListView):
+class ReturnProduct(ListView):
     model = Refund
     template_name = 'admin/refunds.html'
     paginate_by = 8
 
 
-class RefundAgree(DeleteView):
+class ReturnAgreement(DeleteView):
     model = Refund
     success_url = '/refunds/'
 
@@ -96,7 +100,8 @@ class RefundAgree(DeleteView):
 
         return redirect(self.success_url)
 
-class RefundReject(DeleteView):
+
+class ReturnRejection(DeleteView):
     model = Refund
     success_url = '/refunds/'
 
@@ -146,16 +151,11 @@ class PurchaseList(ListView):
     template_name = 'common_user/purchase_list.html'
     context_object_name = 'purchases'
 
-
     def get_queryset(self):
         return Purchase.objects.filter(user=self.request.user)
 
 
-from django.contrib import messages
-from django.urls import reverse
-from django.http import HttpResponseRedirect
-
-class CreateRefund(CreateView):
+class CreateReturn(CreateView):
     model = Refund
     form_class = RefundForm
     success_url = '/purchase-list/'
@@ -163,9 +163,6 @@ class CreateRefund(CreateView):
     def form_valid(self, form):
         purchase_id = self.kwargs['purchase_id']
         purchase = Purchase.objects.get(pk=purchase_id)
-
-        from datetime import timedelta
-        from django.utils import timezone
         now = timezone.now()
         if now - purchase.purchase_created > timedelta(minutes=1):
             messages.success(self.request, "Timer has been expired, you have 1 minute to create refund request")
@@ -176,5 +173,3 @@ class CreateRefund(CreateView):
         refund.save()
 
         return super().form_valid(form)
-
-

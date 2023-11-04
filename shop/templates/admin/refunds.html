@@ -14,7 +14,7 @@
        </form>
         <form method="post" action="{% url 'shop:refund_reject' obj.id %}">
          {% csrf_token %}
-         <button type="submit" class="btn btn-danger" aria-current="page">Reject</button>
+         <button type="submit" class="btn btn-danger" aria-current="page">Cancel</button>
        </form>
       <small>{{obj.refund_time}}</small>
     </div>

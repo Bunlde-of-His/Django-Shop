@@ -14,7 +14,6 @@
       {% for obj in page_obj %}
       <div class="col mb-5">
         <div class="card h-100">
-          <div class="badge bg-danger text-white position-absolute mt-1 ms-1">Sale</div>
          <img class="card-img-top mx-auto" src="{% static obj.image.url %}" alt="Product Image" style="width: 134px; height: 279px;">
           <div class="card-body">
             <a href="#" class="h4 text-primary text-decoration-none">{{ obj.title }}</a>

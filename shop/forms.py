@@ -13,7 +13,7 @@ class CustomUserCreationForm(UserCreationForm):
         fields = ['username', 'email', 'first_name', 'last_name']
 
 
-class PurchaseForm(forms.Form):
+class PurchaseForm(forms.ModelForm):
     quantity = forms.IntegerField(
         label='Quantity',
         widget=forms.NumberInput(attrs={'class': 'form-control'}),
@@ -24,3 +24,4 @@ class RefundForm(forms.ModelForm):
     class Meta:
         model = Refund
         fields = []
+

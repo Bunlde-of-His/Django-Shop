@@ -1,6 +1,6 @@
 {% extends "base.html" %}
 
-{% block title %} Shop #1 {% endblock %}
+{% block title %} My shop {% endblock %}
 
 {% block content %}
     {% for message in messages %}
@@ -10,13 +10,12 @@
     </div>
     {% endfor %}
     <section class="py-2">
-        <div class "container px-4 px-lg-5 mt-5">
+        <div class="container px-4 px-lg-5 mt-5">
             <div class="row gx-4 gx-lg-5 row-cols-2 row-cols-md-3 row-cols-xl-4 justify-content-center">
 
                 {% for obj in page_obj %}
                 <div class="col mb-5">
                     <div class="card h-100">
-                        <div class="badge bg-danger text-white position-absolute mt-1 ms-1">Sale</div>
                         <img class="card-img-top mx-auto" src="{{ obj.image.url }}" alt="Product Image"
                              style="width: 134px; height: 279px;">
                         <div class="card-body">
